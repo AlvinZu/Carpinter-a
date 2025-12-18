@@ -140,8 +140,16 @@
 
         /* --- BOTTOM NAV --- */
         .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; height: var(--nav-height);
+            position: fixed; bottom: 0; width: 100%; 
             background: white; display: flex; justify-content: space-around; align-items: center;
+            
+            /* AQUÍ ESTÁ EL CAMBIO CLAVE: */
+            /* Sumamos 15px extra al área segura del iPhone */
+            padding-bottom: calc(env(safe-area-inset-bottom) + 15px);
+            
+            /* Ajustamos la altura total sumando esos mismos 15px */
+            height: calc(var(--nav-height) + env(safe-area-inset-bottom) + 15px);
+            
             box-shadow: 0 -2px 15px rgba(0,0,0,0.05); z-index: 999;
         }
         .nav-item {
@@ -151,7 +159,6 @@
         .nav-item.active { color: var(--primary); background: #fffbf0; border-top: 3px solid var(--primary); }
         .nav-icon { font-size: 1.5rem; margin-bottom: 3px; }
         
-        /* Texto de resultado simple para convertidor */
         .simple-result { font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #333; }
 
     </style>
@@ -457,4 +464,5 @@
     </script>
 </body>
 </html>
+
 

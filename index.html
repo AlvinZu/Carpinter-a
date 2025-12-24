@@ -2,34 +2,32 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CARPINTERIA FACIL PRO v8</title>
-    <link rel="icon" type="image/png" href="icon-192x192.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>CARPINTERIA FACIL PRO v12</title>
+    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Carpintería">
-  
-  
-    <!-- Icono App -->
+    
+    <link rel="icon" type="image/png" href="icon-192x192.png">
+    <link rel="apple-touch-icon" href="icon-180x180.png">
     <link rel="apple-touch-icon" sizes="152x152" href="icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="icon-180x180.png">
     <link rel="apple-touch-icon" sizes="192x192" href="icon-192x192.png">
     <link rel="apple-touch-icon" sizes="512x512" href="icon-512x512.png">
+    
     <link rel="manifest" href="manifest.json">
 
-    
     <style>
         :root {
-            --primary: #5d4037; /* Café madera oscuro */
+            --primary: #5d4037;
             --primary-light: #8d6e63;
-            --accent: #ffab00; /* Amber para resaltar (borde amarillo) */
+            --accent: #ffab00;
             --bg: #f5f5f5;
             --text: #333;
             --white: #ffffff;
             --nav-height: 65px;
             --radius: 12px;
-            
-            /* Colores Tips */
             --tip-green-bg: #e8f5e9;
             --tip-green-border: #4caf50;
             --tip-green-text: #2e7d32;
@@ -40,7 +38,8 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: calc(var(--nav-height) + 30px);
+            padding-bottom: calc(var(--nav-height) + 50px);
+            overscroll-behavior-y: none;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -49,6 +48,7 @@
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: var(--white);
             padding: 1.5rem 1rem;
+            padding-top: calc(1.5rem + env(safe-area-inset-top)); 
             text-align: center;
             border-radius: 0 0 20px 20px;
             box-shadow: 0 4px 10px rgba(93, 64, 55, 0.3);
@@ -66,7 +66,7 @@
         .card {
             background: var(--white); border-radius: var(--radius);
             box-shadow: 0 4px 15px rgba(0,0,0,0.05); padding: 20px;
-            margin-bottom: 20px; border-left: 6px solid var(--accent); /* Borde amarillo grueso como en la foto */
+            margin-bottom: 20px; border-left: 6px solid var(--accent);
         }
         h2.section-title {
             font-size: 1.2rem; color: var(--primary); margin-bottom: 20px;
@@ -87,7 +87,7 @@
         .btn:active { transform: scale(0.98); }
         .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); margin-top: 10px; font-size: 0.9rem; padding: 10px;}
 
-        /* --- TABLA MATERIALES --- */
+        /* --- TABLAS --- */
         .mat-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
         .mat-table th { text-align: left; color: #666; border-bottom: 2px solid #eee; padding: 5px; }
         .mat-table td { padding: 8px 5px; border-bottom: 1px solid #eee; }
@@ -111,26 +111,20 @@
         .measure-item { margin-bottom: 8px; display: flex; justify-content: space-between; border-bottom: 1px dashed #eee; padding-bottom: 5px; }
         .measure-val { font-weight: bold; color: #333; }
 
-        /* --- ESTILOS DESPIECE --- */
+        /* --- DESPIECE VISUAL --- */
         .diagram-box { width: 100%; height: 100px; background: #eee; margin-bottom: 15px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
         .d-outer { border: 2px solid #333; width: 80%; height: 80%; display:flex; justify-content:center; align-items:center; background:#ddd;}
         .d-inner { border: 2px dashed var(--accent); width: 90%; height: 90%; background: #fff; display:flex; justify-content:center; align-items:center; color: var(--accent); font-weight:bold; font-size:0.8rem;}
         
-        /* Caja de resultados amarilla (Igual a tu foto de Tornillos) */
         .cut-list { 
-            background: #fff8e1; 
-            border: 1px dashed var(--accent); 
-            border-radius: 8px; 
-            padding: 20px; 
-            margin-top: 20px; 
-            display: none; 
-            text-align: center;
+            background: #fff8e1; border: 1px dashed var(--accent); border-radius: 8px; 
+            padding: 20px; margin-top: 20px; display: none; text-align: center;
         }
         .cut-item { display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 5px; text-align: left;}
         .cut-label { font-weight: 600; color: var(--primary); }
         .cut-val { font-weight: 800; color: #333; font-size: 1.1rem; }
 
-        /* --- ESTILOS TIPS --- */
+        /* --- TIPS --- */
         .tip-card { background: white; border-radius: 12px; margin-bottom: 15px; border-top: 4px solid var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); overflow: hidden;}
         .tip-header { padding: 10px 15px; background-color: #efebe9; display: flex; justify-content: space-between; align-items: center; }
         .tip-tag { background: var(--primary); color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; text-transform: uppercase; font-weight: bold;}
@@ -142,14 +136,8 @@
         .bottom-nav {
             position: fixed; bottom: 0; width: 100%; 
             background: white; display: flex; justify-content: space-around; align-items: center;
-            
-            /* AQUÍ ESTÁ EL CAMBIO CLAVE: */
-            /* Sumamos 15px extra al área segura del iPhone */
             padding-bottom: calc(env(safe-area-inset-bottom) + 15px);
-            
-            /* Ajustamos la altura total sumando esos mismos 15px */
             height: calc(var(--nav-height) + env(safe-area-inset-bottom) + 15px);
-            
             box-shadow: 0 -2px 15px rgba(0,0,0,0.05); z-index: 999;
         }
         .nav-item {
@@ -171,31 +159,16 @@
     </header>
 
     <main id="view-cut" class="view-section active">
+        
         <div class="card">
             <h2 class="section-title">📦 Despiece de Cajón</h2>
             <div class="diagram-box">
                 <div class="d-outer">Mueble<div class="d-inner">Cajón</div></div>
             </div>
             <p style="font-size:0.9rem; margin-bottom:15px; color:#555;">Calcula piezas respetando <b>13mm</b> de corredera por lado.</p>
-
-            <div class="input-group">
-                <label>Ancho INTERIOR del hueco:</label>
-                <input type="number" id="drawerHoleW" placeholder="Ej. 564">
-                <span class="unit">mm</span>
-            </div>
-            <div class="input-group">
-                <label>Profundidad del Mueble:</label>
-                <input type="number" id="drawerDepth" placeholder="Ej. 500">
-                <span class="unit">mm</span>
-            </div>
-            <div class="input-group">
-                <label>Grosor Melamina:</label>
-                <select id="drawerThickness">
-                    <option value="15">15 mm</option>
-                    <option value="16">16 mm</option>
-                    <option value="18">18 mm</option>
-                </select>
-            </div>
+            <div class="input-group"><label>Ancho INTERIOR del hueco:</label><input type="number" id="drawerHoleW" placeholder="Ej. 564"><span class="unit">mm</span></div>
+            <div class="input-group"><label>Profundidad del Mueble:</label><input type="number" id="drawerDepth" placeholder="Ej. 500"><span class="unit">mm</span></div>
+            <div class="input-group"><label>Grosor Melamina:</label><select id="drawerThickness"><option value="15">15 mm</option><option value="16">16 mm</option><option value="18">18 mm</option></select></div>
             <button class="btn" onclick="calcDrawer()">Calcular Cortes</button>
             <div id="resDrawer" class="cut-list" style="text-align:left;">
                 <h3 style="margin-bottom:10px; color:var(--primary); text-align:center;">✂️ Lista de Corte</h3>
@@ -205,22 +178,91 @@
                 <span class="note" style="display:block; text-align:center; margin-top:10px;">* Corredera sugerida: <span id="valSlide" style="font-weight:bold;"></span></span>
             </div>
         </div>
+
         <div class="card">
-            <h2 class="section-title">🚪 Puerta Interna</h2>
-            <div class="input-group">
-                <label>Alto Hueco:</label> <input type="number" id="doorH"><span class="unit">mm</span>
-            </div>
-            <div class="input-group">
-                <label>Ancho Hueco:</label> <input type="number" id="doorW"><span class="unit">mm</span>
-            </div>
-            <div class="input-group">
-                <label>Luz por lado:</label>
-                <select id="doorGap"><option value="3">3 mm (Estándar)</option><option value="2">2 mm</option></select>
-            </div>
+            <h2 class="section-title">🚪 Puerta Interna (Inset)</h2>
+            <div class="input-group"><label>Alto Hueco:</label> <input type="number" id="doorH"><span class="unit">mm</span></div>
+            <div class="input-group"><label>Ancho Hueco:</label> <input type="number" id="doorW"><span class="unit">mm</span></div>
+            <div class="input-group"><label>Luz por lado:</label><select id="doorGap"><option value="3">3 mm (Estándar)</option><option value="2">2 mm</option></select></div>
             <button class="btn" onclick="calcDoor()">Calcular</button>
             <div id="resDoor" class="cut-list" style="background:#e0f2f1; border-color:#00897b; text-align:left;">
                 <div class="cut-item"><span class="cut-label">Medida Final:</span><span class="cut-val" id="valDoorDim"></span></div>
                 <span class="note" style="display:block; text-align:center;">Usar bisagras Inset (Superacodadas).</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">🚪 Puerta Sobrepuesta (Parche)</h2>
+            
+            <div class="diagram-box">
+                <div class="d-outer" style="width:60%; height:80%; border:2px solid #ccc; position:relative;">
+                    Hueco
+                    <div style="position:absolute; top:-10px; left:-10px; width:calc(100% + 20px); height:calc(100% + 20px); border:2px solid var(--accent); background:rgba(255, 171, 0, 0.1); display:flex; justify-content:center; align-items:flex-end; color:var(--accent); font-weight:bold; font-size:0.8rem; padding-bottom:5px;">Puerta</div>
+                </div>
+            </div>
+            
+            <p style="font-size:0.9rem; margin-bottom:15px; color:#555;">La puerta tapa el canto. Se calculan <b>2mm de aire</b> automáticos.</p>
+
+            <div class="input-group">
+                <label>Alto Hueco (Interior):</label>
+                <input type="number" id="ovH" placeholder="Interior"><span class="unit">mm</span>
+            </div>
+            <div class="input-group">
+                <label>Ancho Hueco (Interior):</label>
+                <input type="number" id="ovW" placeholder="Interior"><span class="unit">mm</span>
+            </div>
+            <div class="input-group">
+                <label>¿Cuánto quieres que monte (solape)?</label>
+                <select id="ovSolape">
+                    <option value="14">14 mm (Para tablero 15mm)</option>
+                    <option value="17">17 mm (Para tablero 18mm)</option>
+                    <option value="10">10 mm (Medio parche)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Cantidad de Puertas:</label>
+                <select id="ovQty">
+                    <option value="1">1 Puerta</option>
+                    <option value="2">2 Puertas (Par)</option>
+                </select>
+            </div>
+
+            <button class="btn" onclick="calcOverlayDoor()">Calcular Medida</button>
+
+            <div id="resOverlay" class="cut-list" style="text-align:left; background:#e8f5e9; border-color:#2e7d32;">
+                <h3 style="margin-bottom:10px; color:#2e7d32; text-align:center;">📏 Medida de Corte</h3>
+                
+                <div class="cut-item">
+                    <span class="cut-label">Alto:</span>
+                    <span class="cut-val" id="resOvH"></span>
+                </div>
+                <div class="cut-item">
+                    <span class="cut-label">Ancho (x<span id="resOvQ">1</span>):</span>
+                    <span class="cut-val" id="resOvW"></span>
+                </div>
+
+                <span class="note" style="display:block; text-align:center; margin-top:10px;">
+                    Usar bisagras Rectas (Cobertura completa) o Semicurvas según el solape.
+                </span>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="section-title">📚 Repisas / Divisiones</h2>
+            <div class="diagram-box" style="flex-direction: column; justify-content: space-evenly; background: #eceff1;">
+                <div style="width:70%; height:4px; background:var(--primary-light);"></div>
+                <div style="width:70%; height:4px; background:var(--primary-light);"></div>
+                <div style="width:70%; height:4px; background:var(--primary-light);"></div>
+            </div>
+            <p style="font-size:0.9rem; margin-bottom:15px; color:#555;">Calcula el espacio exacto entre repisas (luces iguales).</p>
+            <div class="input-group"><label>Altura del Hueco (Interior):</label><input type="number" id="shelfH" placeholder="Ej. 1800"><span class="unit">mm</span></div>
+            <div class="input-group"><label>Grosor de Repisa:</label><select id="shelfThick"><option value="15">15 mm</option><option value="16">16 mm</option><option value="18">18 mm</option></select></div>
+            <div class="input-group"><label>Cantidad de Repisas:</label><input type="number" id="shelfQty" placeholder="Ej. 3"></div>
+            <button class="btn" onclick="calcShelves()">Calcular Espacios</button>
+            <div id="resShelves" class="cut-list">
+                Debes dejar un hueco de: <br>
+                <strong style="font-size:2rem; color:#333;" id="valShelfGap">0</strong> <span style="font-size:1.2rem; color:#555;">mm</span>
+                <span class="note" style="display:block; margin-top:10px;">(Entre cada repisa)</span>
             </div>
         </div>
     </main>
@@ -230,24 +272,12 @@
             <h2 class="section-title">🪵 Calculadora de Hojas</h2>
             <p style="font-size:0.9rem; color:#666; margin-bottom:15px;">Suma tus piezas para estimar material.</p>
             <div style="display:flex; gap:10px;">
-                <div class="input-group" style="flex:1;">
-                    <label>Largo (mm)</label>
-                    <input type="number" id="matL" placeholder="2400">
-                </div>
-                <div class="input-group" style="flex:1;">
-                    <label>Ancho (mm)</label>
-                    <input type="number" id="matW" placeholder="600">
-                </div>
+                <div class="input-group" style="flex:1;"><label>Largo (mm)</label><input type="number" id="matL" placeholder="2400"></div>
+                <div class="input-group" style="flex:1;"><label>Ancho (mm)</label><input type="number" id="matW" placeholder="600"></div>
             </div>
-            <div class="input-group">
-                <label>Cantidad</label>
-                <input type="number" id="matQ" value="1">
-            </div>
+            <div class="input-group"><label>Cantidad</label><input type="number" id="matQ" value="1"></div>
             <button class="btn" onclick="addMaterialPiece()">➕ Agregar Pieza</button>
-            <table class="mat-table">
-                <thead><tr><th>Cant.</th><th>Medida</th><th>Area</th></tr></thead>
-                <tbody id="matListBody"></tbody>
-            </table>
+            <table class="mat-table"><thead><tr><th>Cant.</th><th>Medida</th><th>Area</th></tr></thead><tbody id="matListBody"></tbody></table>
             <div class="mat-summary" id="matResult" style="display:none;">
                 <p>Area Total: <strong id="totalM2">0</strong> m²</p>
                 <div style="margin:15px 0; border-top:1px solid #ccc; padding-top:10px;">
@@ -303,41 +333,19 @@
     </main>
 
     <main id="view-tools" class="view-section">
-        
         <div class="card">
             <h2 class="section-title">🔩 Tornillos por Metro</h2>
-            <div class="input-group">
-                <label>Metros lineales a unir:</label>
-                <input type="number" id="screwMeters" placeholder="Ej. 3">
-            </div>
+            <div class="input-group"><label>Metros lineales a unir:</label><input type="number" id="screwMeters" placeholder="Ej. 3"></div>
             <button class="btn" onclick="calcScrews()">Calcular</button>
-            
             <div id="resScrews" class="cut-list">
-                Necesitas aprox: <br>
-                <strong style="font-size:2rem; color:#333;" id="valScrews">0</strong> <span style="font-size:1.2rem; color:#555;">Tornillos</span>
+                Necesitas aprox: <br><strong style="font-size:2rem; color:#333;" id="valScrews">0</strong> <span style="font-size:1.2rem; color:#555;">Tornillos</span>
             </div>
         </div>
-
         <div class="card">
             <h2 class="section-title">🔄 Convertidor Universal</h2>
-            
-            <div class="input-group">
-                <label>Milímetros (mm):</label>
-                <input type="number" id="inputMM" oninput="convertMM(this.value)" placeholder="Ej. 66">
-                <div class="simple-result">
-                    = <span id="resCM">0</span> cm
-                </div>
-            </div>
-
+            <div class="input-group"><label>Milímetros (mm):</label><input type="number" id="inputMM" oninput="convertMM(this.value)" placeholder="Ej. 66"><div class="simple-result">= <span id="resCM">0</span> cm</div></div>
             <div style="margin: 25px 0; border-top: 1px solid #eee;"></div>
-
-            <div class="input-group">
-                <label>Pulgadas (inch):</label>
-                <input type="number" id="inputInch" oninput="convertInch(this.value)" placeholder="Ej. 7">
-                <div class="simple-result">
-                    = <span id="resCMfromInch">0</span> cm
-                </div>
-            </div>
+            <div class="input-group"><label>Pulgadas (inch):</label><input type="number" id="inputInch" oninput="convertInch(this.value)" placeholder="Ej. 7"><div class="simple-result">= <span id="resCMfromInch">0</span> cm</div></div>
         </div>
     </main>
 
@@ -386,7 +394,7 @@
         }
         function resetMaterial() { if(confirm("¿Borrar?")) { pieces = []; renderMaterialList(); } }
 
-        // --- LOGICA DESPIECE ---
+        // --- LOGICA DESPIECE (Cajones y Puertas) ---
         function calcDrawer() {
             let hW = parseFloat(document.getElementById('drawerHoleW').value);
             let dep = parseFloat(document.getElementById('drawerDepth').value);
@@ -400,6 +408,7 @@
             document.getElementById('valSlide').innerText = `${slide} mm`;
             document.getElementById('resDrawer').style.display = 'block';
         }
+
         function calcDoor() {
             let h = parseFloat(document.getElementById('doorH').value);
             let w = parseFloat(document.getElementById('doorW').value);
@@ -408,6 +417,52 @@
                 document.getElementById('valDoorDim').innerText = `${h-(g*2)} x ${w-(g*2)} mm`;
                 document.getElementById('resDoor').style.display='block';
             }
+        }
+
+        // --- NUEVA FUNCION: PUERTAS SOBREPUESTAS (PARCHE) ---
+        function calcOverlayDoor() {
+            let H = parseFloat(document.getElementById('ovH').value);
+            let W = parseFloat(document.getElementById('ovW').value);
+            let solape = parseFloat(document.getElementById('ovSolape').value);
+            let qty = parseInt(document.getElementById('ovQty').value);
+
+            if (!H || !W) { alert("Ingresa las medidas del hueco"); return; }
+
+            // LÓGICA DE CARPINTERÍA:
+            // Alto: Hueco + (Solape Arriba + Solape Abajo) - (Aire Arriba + Aire Abajo)
+            // Normalmente: H + (2 * Solape) - 4mm (2mm aire arriba, 2mm aire abajo)
+            let cutH = H + (solape * 2) - 4;
+
+            let cutW;
+            if (qty === 1) {
+                // 1 Puerta: Hueco + (Solape Izq + Solape Der) - (Aire Izq + Aire Der)
+                cutW = W + (solape * 2) - 4;
+            } else {
+                // 2 Puertas:
+                // Ancho Total = W + (Solape * 2) - 4 (aires laterales)
+                // Se resta 3mm de luz central entre puertas
+                // Se divide entre 2
+                cutW = (W + (solape * 2) - 4 - 3) / 2;
+            }
+
+            document.getElementById('resOvH').innerText = cutH + " mm";
+            document.getElementById('resOvW').innerText = cutW + " mm";
+            document.getElementById('resOvQ').innerText = qty;
+            document.getElementById('resOverlay').style.display = 'block';
+        }
+
+        // --- FUNCION REPISAS ---
+        function calcShelves() {
+            let H = parseFloat(document.getElementById('shelfH').value);
+            let th = parseFloat(document.getElementById('shelfThick').value);
+            let qty = parseFloat(document.getElementById('shelfQty').value);
+            if (!H || !qty) { alert("Ingresa datos"); return; }
+            let totalThick = th * qty;
+            let freeSpace = H - totalThick;
+            if (freeSpace <= 0) { alert("Error: Demasiadas repisas"); return; }
+            let gap = freeSpace / (qty + 1);
+            document.getElementById('valShelfGap').innerText = gap.toFixed(1);
+            document.getElementById('resShelves').style.display = 'block';
         }
 
         // --- LOGICA EXTRAS ---
@@ -464,5 +519,3 @@
     </script>
 </body>
 </html>
-
-

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>CARPINTERIA FACIL PRO v12</title>
+    <title>CARPINTERIA FACIL PRO v14</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -15,7 +15,6 @@
     <link rel="apple-touch-icon" sizes="180x180" href="icon-180x180.png">
     <link rel="apple-touch-icon" sizes="192x192" href="icon-192x192.png">
     <link rel="apple-touch-icon" sizes="512x512" href="icon-512x512.png">
-    
     <link rel="manifest" href="manifest.json">
 
     <style>
@@ -86,6 +85,13 @@
         }
         .btn:active { transform: scale(0.98); }
         .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); margin-top: 10px; font-size: 0.9rem; padding: 10px;}
+        
+        /* Botón Guardar Pequeño */
+        .btn-save {
+            background: transparent; border: 1px solid rgba(0,0,0,0.2); color: #333;
+            margin-top: 15px; padding: 8px; font-size: 0.9rem; width: auto; display: inline-block;
+            border-radius: 20px; padding-left: 15px; padding-right: 15px;
+        }
 
         /* --- TABLAS --- */
         .mat-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
@@ -132,6 +138,30 @@
         .tip-title { color: var(--primary); margin-bottom: 8px; font-size: 1.1rem; font-weight: 700;}
         .pro-tip { background: var(--tip-green-bg); border-left: 4px solid var(--tip-green-border); color: var(--tip-green-text); padding: 12px; font-size: 0.9rem; font-style: italic; margin-top: 12px; border-radius: 0 4px 4px 0; font-weight: 500;}
 
+        /* --- ESTILOS HISTORIAL --- */
+        .history-card {
+            background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;
+            border-left: 5px solid #607d8b; cursor: pointer; transition: transform 0.2s;
+        }
+        .history-card:active { transform: scale(0.98); background: #f9f9f9; }
+        .h-info h3 { font-size: 1rem; color: #333; margin-bottom: 5px; }
+        .h-info small { color: #888; font-size: 0.8rem; }
+        .h-actions { display: flex; gap: 10px; }
+        .btn-icon { background: none; border: none; font-size: 1.2rem; padding: 5px; cursor: pointer; color: #777; }
+
+        /* --- MODAL --- */
+        .modal {
+            display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6); align-items: center; justify-content: center;
+            animation: fadeIn 0.3s;
+        }
+        .modal-content {
+            background-color: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; max-height: 80vh; overflow-y: auto;
+        }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 1.5rem; color: #aaa; cursor: pointer; font-weight: bold; }
+
         /* --- BOTTOM NAV --- */
         .bottom-nav {
             position: fixed; bottom: 0; width: 100%; 
@@ -145,7 +175,7 @@
             color: #aaa; text-decoration: none; font-size: 0.7rem; width: 100%; height: 100%; cursor: pointer;
         }
         .nav-item.active { color: var(--primary); background: #fffbf0; border-top: 3px solid var(--primary); }
-        .nav-icon { font-size: 1.5rem; margin-bottom: 3px; }
+        .nav-icon { font-size: 1.4rem; margin-bottom: 3px; }
         
         .simple-result { font-weight: bold; font-size: 1.1rem; margin-top: 8px; color: #333; }
 
@@ -176,6 +206,7 @@
                 <div class="cut-item"><span class="cut-label">2x Frente/Trasera:</span><span class="cut-val" id="valFront"></span></div>
                 <div class="cut-item"><span class="cut-label">1x Fondo:</span><span class="cut-val" id="valFloor"></span></div>
                 <span class="note" style="display:block; text-align:center; margin-top:10px;">* Corredera sugerida: <span id="valSlide" style="font-weight:bold;"></span></span>
+                <div style="text-align:center;"><button class="btn-save" onclick="saveProject('Cajón')">💾 Guardar Medida</button></div>
             </div>
         </div>
 
@@ -188,62 +219,29 @@
             <div id="resDoor" class="cut-list" style="background:#e0f2f1; border-color:#00897b; text-align:left;">
                 <div class="cut-item"><span class="cut-label">Medida Final:</span><span class="cut-val" id="valDoorDim"></span></div>
                 <span class="note" style="display:block; text-align:center;">Usar bisagras Inset (Superacodadas).</span>
+                <div style="text-align:center;"><button class="btn-save" onclick="saveProject('Puerta Interna')">💾 Guardar Medida</button></div>
             </div>
         </div>
 
         <div class="card">
             <h2 class="section-title">🚪 Puerta Sobrepuesta (Parche)</h2>
-            
             <div class="diagram-box">
                 <div class="d-outer" style="width:60%; height:80%; border:2px solid #ccc; position:relative;">
                     Hueco
                     <div style="position:absolute; top:-10px; left:-10px; width:calc(100% + 20px); height:calc(100% + 20px); border:2px solid var(--accent); background:rgba(255, 171, 0, 0.1); display:flex; justify-content:center; align-items:flex-end; color:var(--accent); font-weight:bold; font-size:0.8rem; padding-bottom:5px;">Puerta</div>
                 </div>
             </div>
-            
-            <p style="font-size:0.9rem; margin-bottom:15px; color:#555;">La puerta tapa el canto. Se calculan <b>2mm de aire</b> automáticos.</p>
-
-            <div class="input-group">
-                <label>Alto Hueco (Interior):</label>
-                <input type="number" id="ovH" placeholder="Interior"><span class="unit">mm</span>
-            </div>
-            <div class="input-group">
-                <label>Ancho Hueco (Interior):</label>
-                <input type="number" id="ovW" placeholder="Interior"><span class="unit">mm</span>
-            </div>
-            <div class="input-group">
-                <label>¿Cuánto quieres que monte (solape)?</label>
-                <select id="ovSolape">
-                    <option value="14">14 mm (Para tablero 15mm)</option>
-                    <option value="17">17 mm (Para tablero 18mm)</option>
-                    <option value="10">10 mm (Medio parche)</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>Cantidad de Puertas:</label>
-                <select id="ovQty">
-                    <option value="1">1 Puerta</option>
-                    <option value="2">2 Puertas (Par)</option>
-                </select>
-            </div>
-
+            <div class="input-group"><label>Alto Hueco (Interior):</label><input type="number" id="ovH" placeholder="Interior"><span class="unit">mm</span></div>
+            <div class="input-group"><label>Ancho Hueco (Interior):</label><input type="number" id="ovW" placeholder="Interior"><span class="unit">mm</span></div>
+            <div class="input-group"><label>¿Cuánto quieres que monte?</label><select id="ovSolape"><option value="14">14 mm (Tablero 15)</option><option value="17">17 mm (Tablero 18)</option><option value="10">10 mm (Medio parche)</option></select></div>
+            <div class="input-group"><label>Cantidad de Puertas:</label><select id="ovQty"><option value="1">1 Puerta</option><option value="2">2 Puertas (Par)</option></select></div>
             <button class="btn" onclick="calcOverlayDoor()">Calcular Medida</button>
-
             <div id="resOverlay" class="cut-list" style="text-align:left; background:#e8f5e9; border-color:#2e7d32;">
                 <h3 style="margin-bottom:10px; color:#2e7d32; text-align:center;">📏 Medida de Corte</h3>
-                
-                <div class="cut-item">
-                    <span class="cut-label">Alto:</span>
-                    <span class="cut-val" id="resOvH"></span>
-                </div>
-                <div class="cut-item">
-                    <span class="cut-label">Ancho (x<span id="resOvQ">1</span>):</span>
-                    <span class="cut-val" id="resOvW"></span>
-                </div>
-
-                <span class="note" style="display:block; text-align:center; margin-top:10px;">
-                    Usar bisagras Rectas (Cobertura completa) o Semicurvas según el solape.
-                </span>
+                <div class="cut-item"><span class="cut-label">Alto:</span><span class="cut-val" id="resOvH"></span></div>
+                <div class="cut-item"><span class="cut-label">Ancho (x<span id="resOvQ">1</span>):</span><span class="cut-val" id="resOvW"></span></div>
+                <span class="note" style="display:block; text-align:center; margin-top:10px;">Usar bisagras Rectas o Semicurvas.</span>
+                <div style="text-align:center;"><button class="btn-save" onclick="saveProject('Puerta Parche')">💾 Guardar Medida</button></div>
             </div>
         </div>
 
@@ -254,7 +252,6 @@
                 <div style="width:70%; height:4px; background:var(--primary-light);"></div>
                 <div style="width:70%; height:4px; background:var(--primary-light);"></div>
             </div>
-            <p style="font-size:0.9rem; margin-bottom:15px; color:#555;">Calcula el espacio exacto entre repisas (luces iguales).</p>
             <div class="input-group"><label>Altura del Hueco (Interior):</label><input type="number" id="shelfH" placeholder="Ej. 1800"><span class="unit">mm</span></div>
             <div class="input-group"><label>Grosor de Repisa:</label><select id="shelfThick"><option value="15">15 mm</option><option value="16">16 mm</option><option value="18">18 mm</option></select></div>
             <div class="input-group"><label>Cantidad de Repisas:</label><input type="number" id="shelfQty" placeholder="Ej. 3"></div>
@@ -263,6 +260,7 @@
                 Debes dejar un hueco de: <br>
                 <strong style="font-size:2rem; color:#333;" id="valShelfGap">0</strong> <span style="font-size:1.2rem; color:#555;">mm</span>
                 <span class="note" style="display:block; margin-top:10px;">(Entre cada repisa)</span>
+                <div style="text-align:center;"><button class="btn-save" onclick="saveProject('Repisas')">💾 Guardar Medida</button></div>
             </div>
         </div>
     </main>
@@ -349,12 +347,39 @@
         </div>
     </main>
 
+    <main id="view-history" class="view-section">
+        <div style="text-align:center; margin-bottom:20px;">
+            <h2 style="color:var(--primary);">📁 Proyectos Guardados</h2>
+            <p style="color:#777; font-size:0.9rem;">Tus cálculos se guardan aquí.</p>
+        </div>
+        <div id="historyContainer">
+            </div>
+        <div id="emptyHistory" style="text-align:center; padding:40px; color:#aaa; display:none;">
+            <span style="font-size:3rem; opacity:0.3;">📂</span>
+            <p>No tienes proyectos guardados.</p>
+        </div>
+    </main>
+
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle" style="color:var(--primary); margin-bottom:5px;">Título</h2>
+            <p id="modalDate" style="color:#888; font-size:0.85rem; margin-bottom:20px;">Fecha</p>
+            <div id="modalBody" style="background:#f5f5f5; padding:15px; border-radius:10px; font-size:0.95rem;">
+                </div>
+            <button class="btn" style="margin-top:20px;" onclick="closeModal()">Cerrar</button>
+        </div>
+    </div>
+
     <nav class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('view-cut', this)">
             <span class="nav-icon">📐</span><span>Despiece</span>
         </div>
         <div class="nav-item" onclick="switchTab('view-material', this)">
             <span class="nav-icon">🪵</span><span>Material</span>
+        </div>
+        <div class="nav-item" onclick="switchTab('view-history', this)">
+            <span class="nav-icon">📁</span><span>Historial</span>
         </div>
         <div class="nav-item" onclick="switchTab('view-tips', this)">
             <span class="nav-icon">📖</span><span>Guía</span>
@@ -394,7 +419,7 @@
         }
         function resetMaterial() { if(confirm("¿Borrar?")) { pieces = []; renderMaterialList(); } }
 
-        // --- LOGICA DESPIECE (Cajones y Puertas) ---
+        // --- LOGICA DESPIECE ---
         function calcDrawer() {
             let hW = parseFloat(document.getElementById('drawerHoleW').value);
             let dep = parseFloat(document.getElementById('drawerDepth').value);
@@ -419,39 +444,20 @@
             }
         }
 
-        // --- NUEVA FUNCION: PUERTAS SOBREPUESTAS (PARCHE) ---
         function calcOverlayDoor() {
             let H = parseFloat(document.getElementById('ovH').value);
             let W = parseFloat(document.getElementById('ovW').value);
             let solape = parseFloat(document.getElementById('ovSolape').value);
             let qty = parseInt(document.getElementById('ovQty').value);
-
             if (!H || !W) { alert("Ingresa las medidas del hueco"); return; }
-
-            // LÓGICA DE CARPINTERÍA:
-            // Alto: Hueco + (Solape Arriba + Solape Abajo) - (Aire Arriba + Aire Abajo)
-            // Normalmente: H + (2 * Solape) - 4mm (2mm aire arriba, 2mm aire abajo)
             let cutH = H + (solape * 2) - 4;
-
-            let cutW;
-            if (qty === 1) {
-                // 1 Puerta: Hueco + (Solape Izq + Solape Der) - (Aire Izq + Aire Der)
-                cutW = W + (solape * 2) - 4;
-            } else {
-                // 2 Puertas:
-                // Ancho Total = W + (Solape * 2) - 4 (aires laterales)
-                // Se resta 3mm de luz central entre puertas
-                // Se divide entre 2
-                cutW = (W + (solape * 2) - 4 - 3) / 2;
-            }
-
+            let cutW = (qty === 1) ? W + (solape * 2) - 4 : (W + (solape * 2) - 4 - 3) / 2;
             document.getElementById('resOvH').innerText = cutH + " mm";
             document.getElementById('resOvW').innerText = cutW + " mm";
             document.getElementById('resOvQ').innerText = qty;
             document.getElementById('resOverlay').style.display = 'block';
         }
 
-        // --- FUNCION REPISAS ---
         function calcShelves() {
             let H = parseFloat(document.getElementById('shelfH').value);
             let th = parseFloat(document.getElementById('shelfThick').value);
@@ -464,6 +470,189 @@
             document.getElementById('valShelfGap').innerText = gap.toFixed(1);
             document.getElementById('resShelves').style.display = 'block';
         }
+
+        // --- SISTEMA DE GUARDADO ACTUALIZADO (DETALLES COMPLETOS) ---
+        
+        function saveProject(type) {
+            let name = prompt("Agrega un nombre para guardar:", type);
+            if (!name) return;
+
+            let date = new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'short', hour:'2-digit', minute:'2-digit' });
+            let inputsHTML = "";
+            let resultHTML = "";
+
+            // 1. CAJÓN
+            if(type === 'Cajón') {
+                let hW = document.getElementById('drawerHoleW').value || 0;
+                let dep = document.getElementById('drawerDepth').value || 0;
+                let th = document.getElementById('drawerThickness').value;
+                
+                inputsHTML = `
+                    <div style="background:#fff3e0; padding:10px; border-radius:8px; margin-bottom:15px; font-size:0.9rem; border:1px solid #ffe0b2;">
+                        <strong style="color:#e65100;">📥 Medidas Originales:</strong>
+                        <ul style="margin:5px 0 0 20px; padding:0; color:#555;">
+                            <li>Hueco Ancho: <b>${hW} mm</b></li>
+                            <li>Profundidad Mueble: <b>${dep} mm</b></li>
+                            <li>Grosor Material: <b>${th} mm</b></li>
+                        </ul>
+                    </div>
+                `;
+                resultHTML = document.getElementById('resDrawer').innerHTML;
+            } 
+            // 2. PUERTA INTERNA
+            else if (type === 'Puerta Interna') {
+                let h = document.getElementById('doorH').value || 0;
+                let w = document.getElementById('doorW').value || 0;
+                let gap = document.getElementById('doorGap').value;
+
+                inputsHTML = `
+                    <div style="background:#e0f2f1; padding:10px; border-radius:8px; margin-bottom:15px; font-size:0.9rem; border:1px solid #b2dfdb;">
+                        <strong style="color:#00695c;">📥 Medidas Originales:</strong>
+                        <ul style="margin:5px 0 0 20px; padding:0; color:#555;">
+                            <li>Alto Hueco: <b>${h} mm</b></li>
+                            <li>Ancho Hueco: <b>${w} mm</b></li>
+                            <li>Luz (Gap): <b>${gap} mm</b></li>
+                        </ul>
+                    </div>
+                `;
+                resultHTML = document.getElementById('resDoor').innerHTML;
+            }
+            // 3. PUERTA PARCHE
+            else if (type === 'Puerta Parche') {
+                let h = document.getElementById('ovH').value || 0;
+                let w = document.getElementById('ovW').value || 0;
+                let sol = document.getElementById('ovSolape').value;
+                let qty = document.getElementById('ovQty').value;
+
+                inputsHTML = `
+                    <div style="background:#e8f5e9; padding:10px; border-radius:8px; margin-bottom:15px; font-size:0.9rem; border:1px solid #c8e6c9;">
+                        <strong style="color:#2e7d32;">📥 Medidas Originales:</strong>
+                        <ul style="margin:5px 0 0 20px; padding:0; color:#555;">
+                            <li>Alto Hueco: <b>${h} mm</b></li>
+                            <li>Ancho Hueco: <b>${w} mm</b></li>
+                            <li>Solape: <b>${sol} mm</b></li>
+                            <li>Cantidad: <b>${qty} puerta(s)</b></li>
+                        </ul>
+                    </div>
+                `;
+                resultHTML = document.getElementById('resOverlay').innerHTML;
+            }
+            // 4. REPISAS
+            else if (type === 'Repisas') {
+                let h = document.getElementById('shelfH').value || 0;
+                let th = document.getElementById('shelfThick').value;
+                let qty = document.getElementById('shelfQty').value || 0;
+
+                inputsHTML = `
+                    <div style="background:#eceff1; padding:10px; border-radius:8px; margin-bottom:15px; font-size:0.9rem; border:1px solid #cfd8dc;">
+                        <strong style="color:#455a64;">📥 Medidas Originales:</strong>
+                        <ul style="margin:5px 0 0 20px; padding:0; color:#555;">
+                            <li>Altura Hueco: <b>${h} mm</b></li>
+                            <li>Grosor Repisa: <b>${th} mm</b></li>
+                            <li>Cantidad: <b>${qty} pzas</b></li>
+                        </ul>
+                    </div>
+                `;
+                resultHTML = document.getElementById('resShelves').innerHTML;
+            }
+
+            // Limpieza: Quitamos los botones de guardar clonados
+            resultHTML = resultHTML.replace(/<div style="text-align:center;"><button.*?<\/button><\/div>/, '');
+            resultHTML = resultHTML.replace(/<button.*?<\/button>/, ''); 
+
+            const project = {
+                id: Date.now(),
+                name: name,
+                type: type,
+                date: date,
+                content: inputsHTML + resultHTML // ¡Ahora incluye los inputs!
+            };
+
+            let projects = JSON.parse(localStorage.getItem('carpentryProjects') || "[]");
+            projects.unshift(project);
+            localStorage.setItem('carpentryProjects', JSON.stringify(projects));
+            
+            alert("✅ Guardado con detalles");
+            loadHistory();
+        }
+
+        // --- FUNCIONES DE HISTORIAL ---
+        function loadHistory() {
+            let projects = JSON.parse(localStorage.getItem('carpentryProjects') || "[]");
+            const container = document.getElementById('historyContainer');
+            const empty = document.getElementById('emptyHistory');
+
+            container.innerHTML = "";
+            
+            if (projects.length === 0) {
+                empty.style.display = 'block';
+                return;
+            } else {
+                empty.style.display = 'none';
+            }
+
+            projects.forEach(p => {
+                let card = document.createElement('div');
+                card.className = 'history-card';
+                card.onclick = (e) => { 
+                    if(!e.target.closest('.h-actions')) openModal(p.id); 
+                };
+                card.innerHTML = `
+                    <div class="h-info">
+                        <h3>${p.name}</h3>
+                        <small>📅 ${p.date} • ${p.type}</small>
+                    </div>
+                    <div class="h-actions">
+                        <button class="btn-icon" onclick="editProjectName(${p.id})">✏️</button>
+                        <button class="btn-icon" onclick="deleteProject(${p.id})" style="color:#d32f2f;">🗑️</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function deleteProject(id) {
+            if(!confirm("¿Borrar este proyecto?")) return;
+            let projects = JSON.parse(localStorage.getItem('carpentryProjects') || "[]");
+            projects = projects.filter(p => p.id !== id);
+            localStorage.setItem('carpentryProjects', JSON.stringify(projects));
+            loadHistory();
+        }
+
+        function editProjectName(id) {
+            let projects = JSON.parse(localStorage.getItem('carpentryProjects') || "[]");
+            let project = projects.find(p => p.id === id);
+            if(project) {
+                let newName = prompt("Nuevo nombre:", project.name);
+                if(newName) {
+                    project.name = newName;
+                    localStorage.setItem('carpentryProjects', JSON.stringify(projects));
+                    loadHistory();
+                }
+            }
+        }
+
+        function openModal(id) {
+            let projects = JSON.parse(localStorage.getItem('carpentryProjects') || "[]");
+            let project = projects.find(p => p.id === id);
+            if(project) {
+                document.getElementById('modalTitle').innerText = project.name;
+                document.getElementById('modalDate').innerText = `Guardado el ${project.date}`;
+                document.getElementById('modalBody').innerHTML = project.content;
+                document.getElementById('projectModal').style.display = 'flex';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('projectModal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            let modal = document.getElementById('projectModal');
+            if (event.target == modal) closeModal();
+        }
+
+        loadHistory();
 
         // --- LOGICA EXTRAS ---
         function calcScrews() {
